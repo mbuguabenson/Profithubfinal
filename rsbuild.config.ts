@@ -145,4 +145,7 @@ export default defineConfig({
             },
         },
     },
+    performance: {
+        buildCache: process.env.VERCEL ? false : true,
+    },
 });
