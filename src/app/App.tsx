@@ -10,11 +10,13 @@ import CallbackPage from '@/pages/callback';
 import Endpoint from '@/pages/endpoint';
 import { TAuthData } from '@/types/api-types';
 import { initializeI18n, TranslationProvider } from '@deriv-com/translations';
+import { syncStorage } from '@/utils/auth-utils';
 import CoreStoreProvider from './CoreStoreProvider';
 import './app-root.scss';
 
 const Layout = lazy(() => import('../components/layout'));
 const AppRoot = lazy(() => import('./app-root'));
+const DTraderPage = lazy(() => import('../pages/dtrader'));
 
 const { TRANSLATIONS_CDN_URL, R2_PROJECT_NAME, CROWDIN_BRANCH_NAME } = process.env;
 // Only use CDN URL if all required variables are present and not empty
@@ -37,27 +39,42 @@ const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => {
 
 const router = createBrowserRouter(
     createRoutesFromElements(
-        <Route
-            path='/'
-            element={
-                <SuspenseWrapper>
-                    <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
-                        <StoreProvider>
-                            <RoutePromptDialog />
-                            <CoreStoreProvider>
-                                <Layout />
-                            </CoreStoreProvider>
-                        </StoreProvider>
-                    </TranslationProvider>
-                </SuspenseWrapper>
-            }
-        >
-            {/* All child routes will be passed as children to Layout */}
-            <Route index element={<AppRoot />} />
-            <Route path='endpoint' element={<Endpoint />} />
-            <Route path='callback' element={<CallbackPage />} />
-
-        </Route>
+        <>
+            <Route
+                path='/'
+                element={
+                    <SuspenseWrapper>
+                        <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
+                            <StoreProvider>
+                                <RoutePromptDialog />
+                                <CoreStoreProvider>
+                                    <Layout />
+                                </CoreStoreProvider>
+                            </StoreProvider>
+                        </TranslationProvider>
+                    </SuspenseWrapper>
+                }
+            >
+                {/* All child routes will be passed as children to Layout */}
+                <Route index element={<AppRoot />} />
+                <Route path='endpoint' element={<Endpoint />} />
+                <Route path='callback' element={<CallbackPage />} />
+            </Route>
+            <Route
+                path='dtrader'
+                element={
+                    <SuspenseWrapper>
+                        <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
+                            <StoreProvider>
+                                <CoreStoreProvider>
+                                    <DTraderPage />
+                                </CoreStoreProvider>
+                            </StoreProvider>
+                        </TranslationProvider>
+                    </SuspenseWrapper>
+                }
+            />
+        </>
     ),
     {
         future: {
@@ -105,6 +122,7 @@ function App() {
             const updateLocalStorage = (token: string, loginid: string) => {
                 localStorage.setItem('authToken', token);
                 localStorage.setItem('active_loginid', loginid);
+                syncStorage();
             };
 
             // Handle demo account

@@ -64,6 +64,8 @@ export default defineConfig({
 
             '@': path.resolve(__dirname, './src'),
             '@root': path.resolve(__dirname, '.'),
+            '@deriv/shared': path.resolve(__dirname, '../shared'),
+            '@deriv/components': path.resolve(__dirname, '../components'),
         },
     },
     output: {
@@ -79,6 +81,14 @@ export default defineConfig({
             { from: 'node_modules/@deriv/deriv-charts/dist/chart/assets/fonts/*', to: 'assets/fonts/[name][ext]' },
             { from: 'node_modules/@deriv/deriv-charts/dist/chart/assets/shaders/*', to: 'assets/shaders/[name][ext]' },
             { from: path.join(__dirname, 'public') },
+            {
+                from: path.join(__dirname, '../trader/dist/trader/js'),
+                to: 'trader/js',
+            },
+            {
+                from: path.join(__dirname, '../trader/dist/trader/js/*'),
+                to: 'trader/js/[name][ext]',
+            },
         ],
         // Ensure service worker is not cached by the browser
         filename: {
