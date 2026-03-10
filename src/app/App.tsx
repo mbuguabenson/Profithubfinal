@@ -1,7 +1,7 @@
 import { initSurvicate } from '../public-path';
 import { lazy, Suspense } from 'react';
 import React from 'react';
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import InitialLoader from '@/components/loader/initial-loader';
 import RoutePromptDialog from '@/components/route-prompt-dialog';
 import { crypto_currencies_display_order, fiat_currencies_display_order } from '@/components/shared';
@@ -38,44 +38,51 @@ const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => {
 
 
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <>
-            <Route
-                path='/'
-                element={
-                    <SuspenseWrapper>
-                        <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
-                            <StoreProvider>
-                                <RoutePromptDialog />
-                                <CoreStoreProvider>
-                                    <Layout />
-                                </CoreStoreProvider>
-                            </StoreProvider>
-                        </TranslationProvider>
-                    </SuspenseWrapper>
-                }
-            >
-                {/* All child routes will be passed as children to Layout */}
-                <Route index element={<AppRoot />} />
-                <Route path='endpoint' element={<Endpoint />} />
-                <Route path='callback' element={<CallbackPage />} />
-            </Route>
-            <Route
-                path='dtrader'
-                element={
-                    <SuspenseWrapper>
-                        <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
-                            <StoreProvider>
-                                <CoreStoreProvider>
-                                    <DTraderPage />
-                                </CoreStoreProvider>
-                            </StoreProvider>
-                        </TranslationProvider>
-                    </SuspenseWrapper>
-                }
-            />
-        </>
-    ),
+    [
+        {
+            path: '/',
+            element: (
+                <SuspenseWrapper>
+                    <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
+                        <StoreProvider>
+                            <RoutePromptDialog />
+                            <CoreStoreProvider>
+                                <Layout />
+                            </CoreStoreProvider>
+                        </StoreProvider>
+                    </TranslationProvider>
+                </SuspenseWrapper>
+            ),
+            children: [
+                {
+                    index: true,
+                    element: <AppRoot />,
+                },
+                {
+                    path: 'endpoint',
+                    element: <Endpoint />,
+                },
+                {
+                    path: 'callback',
+                    element: <CallbackPage />,
+                },
+            ],
+        },
+        {
+            path: '/dtrader',
+            element: (
+                <SuspenseWrapper>
+                    <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
+                        <StoreProvider>
+                            <CoreStoreProvider>
+                                <DTraderPage />
+                            </CoreStoreProvider>
+                        </StoreProvider>
+                    </TranslationProvider>
+                </SuspenseWrapper>
+            ),
+        },
+    ],
     {
         future: {
             v7_startTransition: true,
