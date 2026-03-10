@@ -96,7 +96,7 @@ export default function InitialLoader() {
             </motion.div>
 
             <div className='loader-footer-simple'>
-                <span className='powered-tag'>POWERED BY DERIV TECHNOLOGY</span>
+                <span className='powered-tag'>ADVANCED ALGORITHMIC TRADING</span>
             </div>
         </div>
     );

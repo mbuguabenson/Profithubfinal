@@ -54,7 +54,7 @@ const getDefaultServerURL = () => {
 export const getDefaultAppIdAndUrl = () => {
     const server_url = getDefaultServerURL();
 
-    if (isTestLink()) {
+    if (isLocal()) {
         return { app_id: APP_IDS.LOCALHOST, server_url };
     }
 
@@ -65,14 +65,12 @@ export const getDefaultAppIdAndUrl = () => {
 };
 
 export const getAppId = () => {
-    // 1. Priority: Environment Variable (Deployment)
     const env_app_id =
         process.env.VITE_APP_ID ||
         (import.meta as unknown as { env: { VITE_APP_ID: string } }).env?.VITE_APP_ID ||
         process.env.REACT_APP_Deriv_APP_ID;
 
     if (env_app_id) {
-        console.log('[Config] Using App ID from environment variable:', env_app_id);
         return String(env_app_id);
     }
 
@@ -80,18 +78,13 @@ export const getAppId = () => {
     const config_app_id = window.localStorage.getItem('config.app_id');
     const current_domain = getCurrentProductionDomain() ?? '';
 
-    // 2. Priority: LocalStorage Override (Endpoint Page)
     if (config_app_id) {
         app_id = config_app_id;
-    }
-    // 3. Priority: Staging/Test Environments
-    else if (isStaging()) {
+    } else if (isStaging()) {
         app_id = APP_IDS.STAGING;
-    } else if (isTestLink()) {
+    } else if (isLocal()) {
         app_id = APP_IDS.LOCALHOST;
-    }
-    // 4. Priority: Production / Default
-    else {
+    } else {
         app_id = domain_app_ids[current_domain as keyof typeof domain_app_ids] ?? APP_IDS.PRODUCTION;
     }
 
@@ -146,12 +139,6 @@ export const getDebugServiceWorker = () => {
 
 export const generateOAuthURL = () => {
     const hostname = window.location.hostname;
-    // Special strict fix for Vercel Production
-    if (hostname === 'profithubtool.vercel.app') {
-        const lang = window.localStorage.getItem('lang') || 'EN';
-        return `https://oauth.deriv.com/oauth2/authorize?app_id=121856&l=${lang}&brand=deriv`;
-    }
-
     const lang = window.localStorage.getItem('lang') || 'EN';
     let oauth_url = 'https://oauth.deriv.com/oauth2/authorize';
 
@@ -163,8 +150,5 @@ export const generateOAuthURL = () => {
 
     const app_id = getAppId();
 
-    const login_url = `${oauth_url}?app_id=${app_id}&l=${lang}&brand=deriv`;
-
-    console.log('[Config] Generated OAuth URL:', login_url);
-    return login_url;
+    return `${oauth_url}?app_id=${app_id}&l=${lang}`;
 };

@@ -12,6 +12,7 @@ import {
 import type { TAuthData, TLandingCompany } from '@/types/api-types';
 import type { Balance, GetAccountStatus, GetSettings, WebsiteStatus } from '@deriv/api-types';
 import { Analytics } from '@deriv-com/analytics';
+import { syncStorage } from '@/utils/auth-utils';
 
 const eu_shortcode_regex = /^maltainvest$/;
 const eu_excluded_regex = /^mt$/;
@@ -101,6 +102,7 @@ export default class ClientStore {
                             this.setBalance(String(active_account.balance));
                             this.setCurrency(active_account.currency);
                         }
+                        syncStorage();
                     } catch (e) {
                         console.warn('[ClientStore] Failed to load cached balance:', e);
                     }

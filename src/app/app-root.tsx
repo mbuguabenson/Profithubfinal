@@ -60,7 +60,7 @@ const AppRoot = observer(() => {
                 console.warn('[AppRoot] TMB check safety timeout reached');
                 setIsTmbCheckComplete(true);
             }
-        }, 3000);
+        }, 1000);
 
         const checkTmbStatus = async () => {
             try {
@@ -89,7 +89,7 @@ const AppRoot = observer(() => {
             if (!is_api_initialized) {
                 setIsApiInitialized(true);
             }
-        }, 5000);
+        }, 2000);
 
         const initializeApi = async () => {
             if (!api_base_initialized.current) {

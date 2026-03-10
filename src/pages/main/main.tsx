@@ -44,6 +44,7 @@ const SmartAuto24 = lazy(() => import('../circles-analysis/index'));
 const DigitCracker = lazy(() => import('../digit-cracker/index'));
 const Settings = lazy(() => import('../settings/index'));
 const Strategies = lazy(() => import('../strategies/index'));
+const DTraderTab = lazy(() => import('../dtrader/DTraderTab'));
 
 /** Combined Trading Tools tab: SmartAuto24 + DigitCracker side-by-side sub-tabs */
 const TradingTools = () => {
@@ -131,6 +132,7 @@ const AppWrapper = observer(() => {
         'strategies',
         'settings',
         'tutorials',
+        'dtrader',
     ];
     const { isDesktop } = useDevice();
     const location = useLocation();
@@ -539,6 +541,29 @@ const AppWrapper = observer(() => {
                                     <PageContentWrapper>
                                         <Suspense fallback={<ChunkLoader message={localize('Loading...')} />}>
                                             <Tutorials />
+                                        </Suspense>
+                                    </PageContentWrapper>
+                                </div>
+                            )}
+
+                            {/* Tab 9: DTrader */}
+                            {admin.visible_tabs.dtrader && (
+                                <div
+                                    label={
+                                        <div className='main__tabs-label'>
+                                            <LabelPairedChartLineCaptionRegularIcon
+                                                height='20px'
+                                                width='20px'
+                                                fill='var(--text-general)'
+                                            />
+                                            <Localize i18n_default_text='DTrader' />
+                                        </div>
+                                    }
+                                    id='id-dtrader'
+                                >
+                                    <PageContentWrapper>
+                                        <Suspense fallback={<ChunkLoader message={localize('Loading DTrader...')} />}>
+                                            <DTraderTab />
                                         </Suspense>
                                     </PageContentWrapper>
                                 </div>

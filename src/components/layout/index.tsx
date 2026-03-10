@@ -218,7 +218,7 @@ const Layout = observer(() => {
             // Wait a bit to ensure all state updates have propagated
             const timer = setTimeout(() => {
                 setIsInitialAuthCheckComplete(true);
-            }, 500); // Give it enough time to stabilize
+            }, 100); // Give it enough time to stabilize
 
             return () => clearTimeout(timer);
         }

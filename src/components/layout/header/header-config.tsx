@@ -42,10 +42,10 @@ export type TAccount = {
 
 export const platformsConfig: PlatformsConfig[] = [
     {
-        active: false,
+        active: true,
         buttonIcon: <DerivTraderLogo height={25} width={114.97} />,
         description: localize('A whole new trading experience on a powerful yet easy to use platform.'),
-        href: standalone_routes.trade,
+        href: '/dtrader',
         icon: <DerivTraderLogo height={32} width={148} />,
         showInEU: true,
     },

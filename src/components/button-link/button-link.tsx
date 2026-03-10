@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
 
 type TButtonLinkProps = Omit<React.HTMLProps<HTMLAnchorElement>, 'size'> & {
     to: string;
@@ -14,13 +13,13 @@ const ButtonLink = ({
     onClick,
     size = 'medium',
 }: React.PropsWithChildren<Partial<TButtonLinkProps>>) => (
-    <Link
+    <a
         className={classNames('dc-btn dc-btn--primary', className, 'effect', `dc-btn__${size}`)}
-        to={to ?? ''}
+        href={to ?? ''}
         onClick={onClick}
     >
         {children}
-    </Link>
+    </a>
 );
 
 export default ButtonLink;
