@@ -8,7 +8,7 @@ export default defineConfig({
     plugins: [
         pluginSass({
             sassLoaderOptions: {
-                sourceMap: true,
+                sourceMap: process.env.NODE_ENV === 'development',
                 additionalData: (content, loaderContext) => {
                     const reqPath = (loaderContext.resourcePath || '').replace(/\\/g, '/');
                     if (reqPath.includes('/packages/components/') || reqPath.includes('/packages/api')) {
@@ -69,6 +69,10 @@ export default defineConfig({
         },
     },
     output: {
+        sourceMap: {
+            js: process.env.NODE_ENV === 'development' ? 'cheap-module-source-map' : false,
+            css: process.env.NODE_ENV === 'development',
+        },
         copy: [
             {
                 from: 'node_modules/@deriv/deriv-charts/dist/*',
@@ -132,8 +136,6 @@ export default defineConfig({
             };
         },
         rspack: {
-            plugins: [],
-            resolve: {},
             module: {
                 rules: [
                     {
@@ -146,7 +148,7 @@ export default defineConfig({
         },
     },
     performance: {
-        buildCache: process.env.VERCEL ? false : true,
+        buildCache: false, // Strictly disable to fix Vercel Cache.shutdown OOM
         chunkSplit: {
             strategy: 'single-vendor',
         },
